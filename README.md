@@ -7,14 +7,15 @@ Check (<https://en.wikipedia.org/wiki/Pomodoro_Technique>)
 for more details.
 
 The code is based on : <http://code.activestate.com/recipes/577358-pomodoro-timer/>
+TODO: add did what column and statics
 
 ## How to install ?
 
 ```bash
-    git clone https://github.com/mehdidc/pomodoro
+    git clone https://github.com/zzuse/pomodoro
     cd pomodoro
-    pip install -r requirements.txt
-    python setup.py install
+    pip3 install -r requirements.txt
+    python3 setup.py install
 ```
 
 ## How to use it?
@@ -41,6 +42,9 @@ To do that, you can do:
 ```
 
 **Warning** : notif needs pyqt5 (https://pypi.python.org/pypi/PyQt5/5.8.2)
+```bash
+  pip3 install PyQt5
+```
 
 ## Statistics
 

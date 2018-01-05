@@ -10,7 +10,9 @@ from datetime import datetime
 import os
 
 try:
-    from PyQt5.QtWidgets import QMessageBox
+    """from PyQt5.QtWidgets import QMessageBox
+    """
+    from PyQt5.QtWidgets import QMessageBox, QApplication, QWidget, QInputDialog, QLineEdit
     from PyQt5.Qt import QApplication
 except ImportError:
     has_qt = False
@@ -37,6 +39,16 @@ def notify(title, content, more=''):
     msg.show()
     app.exec_()
 
+def doing_what(title, content, more=''):
+    if not has_qt:
+        return
+    app = QApplication(sys.argv)
+    parent = QWidget()
+    input = QInputDialog()
+    what, okPressed = input.getText(parent, title, content, QLineEdit.Normal,"")
+    if okPressed and what != '':
+        print(what)
+    return what
 
 def tick(duration):
     try:
@@ -58,12 +70,12 @@ def play_alarm(filename):
         pass
 
 
-def write_pomo(start, stop, tag):
+def write_pomo(start, stop, tag, what):
     duration = (stop - start).total_seconds() / 60.
-    line = "{0},{1},{2},{3}\n".format(tag, start, stop, duration)
+    line = "{0},{1},{2},{3},{4}\n".format(tag, start, stop, duration, what)
     if not os.path.exists(DATA_FILENAME):
         fd = open(DATA_FILENAME, "w")
-        fd.write("work,start,end,duration\n")
+        fd.write("work,start,end,duration,what\n")
     else:
         fd = open(DATA_FILENAME, "a")
     fd.write(line)
@@ -94,9 +106,13 @@ def main(work=60, rest=5, repeat=10, alarm=True, notif=False):
         start = datetime.now()
         interrupted = tick(int(work) * 60)
         if interrupted:
+            stop = datetime.now()
+            what = doing_what("Get text","You Did:")
+            write_pomo(start, stop, "work", what)
             break
         stop = datetime.now()
-        write_pomo(start, stop, "work")
+        what = doing_what("Get text","You Did:")
+        write_pomo(start, stop, "work", what)
         if alarm:
             play_alarm(ALARM)
         if notif:
@@ -107,7 +123,7 @@ def main(work=60, rest=5, repeat=10, alarm=True, notif=False):
         if interrupted:
             break
         stop = datetime.now()
-        write_pomo(start, stop, "rest")
+        write_pomo(start, stop, "rest", "water")
 
         if alarm:
             play_alarm(ALARM)
