@@ -44,8 +44,16 @@ def doing_what(title, content, more=''):
         return
     app = QApplication(sys.argv)
     parent = QWidget()
+    parent.activateWindow()
     input = QInputDialog()
-    what, okPressed = input.getText(parent, title, content, QLineEdit.Normal,"")
+    input.setInputMode(QInputDialog.TextInput)
+    input.setWindowTitle(title)
+    input.setLabelText(content)
+    input.resize(500,100)
+    okPressed = input.exec_()
+    what = input.textValue()
+    """what, okPressed = input.getText(parent, title, content, QLineEdit.Normal,"")
+    """
     if okPressed and what != '':
         print(what)
     return what
@@ -83,7 +91,7 @@ def write_pomo(start, stop, tag, what):
 
 
 @modifiers.kwoargs('repeat', 'alarm', 'notif')
-def main(work=60, rest=5, repeat=10, alarm=True, notif=False):
+def main(work=60, rest=5, repeat=10, alarm=True, notif=True):
     """
     work : int
         nb of minuntes of work
