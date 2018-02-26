@@ -1,0 +1,5 @@
+build/
+dist/
+mpg123-1.25.8.tar
+mpg123-1.25.8/
+pomodoro.egg-info/
