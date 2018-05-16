@@ -27,6 +27,9 @@ DATA_FILENAME = os.path.expanduser("~/.pomodoro")
 DEV_NULL = open(os.devnull, "w")
 
 
+def notify_osx(title, text):
+    os.system(""" osascript -e 'display notification "{}" with title "{}"' """.format(text, title))
+
 def notify(title, content, more=''):
     if not has_qt:
         return
@@ -91,7 +94,7 @@ def write_pomo(start, stop, tag, what):
 
 
 @modifiers.kwoargs('repeat', 'alarm', 'notif')
-def main(work=60, rest=5, repeat=10, alarm=True, notif=True):
+def main(work=60, rest=5, repeat=10, alarm=True, notif=False):
     """
     work : int
         nb of minuntes of work
@@ -119,6 +122,7 @@ def main(work=60, rest=5, repeat=10, alarm=True, notif=True):
             write_pomo(start, stop, "work", what)
             break
         stop = datetime.now()
+        notify_osx("Get text", "Think about what You Did!")
         what = doing_what("Get text","You Did:")
         write_pomo(start, stop, "work", what)
         if alarm:
